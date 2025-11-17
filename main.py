@@ -35,12 +35,12 @@ def run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=True):
     p_n_imag = y[:, 2*N:3*N]
     p_n = p_n_real + 1j * p_n_imag
 
-    # Compute observables theo công thức đề bài
+    # Compute observables
     C0 = 2.0
-    sqrt_n_array = np.sqrt(np.arange(1, N+1))  # √n với n=1,2,...,N
+    sqrt_n_array = np.sqrt(np.arange(1, N+1))  
     N_t = C0 * np.sum(sqrt_n_array * f_n, axis=1)
     
-    # Total polarization: P(t) = Σ p_n(t), cũng ∝ Δε√Δε Σ √n p_n
+    # Total polarization
     P_total_complex = np.sum(p_n, axis=1)
     P_t = np.abs(P_total_complex)
 
@@ -71,11 +71,9 @@ def main():
 
     results = {}
     
-    # Chạy simulation cho từng giá trị chi0
     for chi0 in chi0_values:
         try:
             # Simulation với tương tác Coulomb (Hartree-Fock)
-            print(f"\n{'='*70}")
             results[f'{chi0}_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=True)
             
             # Simulation không có tương tác Coulomb (free particle)
