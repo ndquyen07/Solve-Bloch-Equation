@@ -51,18 +51,9 @@ def run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=True):
     omega_pos, alpha = calculate_absorption_spectrum(t, P_total_complex, E_t)
     energy = hbar * omega_pos
 
-    # Visualization
-    coulomb_label = "coulomb" if use_coulomb else "no_coulomb"
-    plt.plot(energy, alpha, label=coulomb_label)
-    plt.xlabel('Energy ℏω (meV)')
-    plt.ylabel('Absorption α(ω)')
-    plt.title(f'Absorption Spectrum for χ₀ = {chi0} ({coulomb_str})')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
 
     print(f"Simulation completed for χ₀ = {chi0} ({coulomb_str})")
-    return t, N_t, P_t, f_n, p_n
+    return t, N_t, P_t, f_n, p_n, energy, alpha
 
 
 def main():
@@ -72,18 +63,12 @@ def main():
     results = {}
     
     for chi0 in chi0_values:
-        try:
-            # Simulation với tương tác Coulomb (Hartree-Fock)
-            results[f'{chi0}_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=True)
-            
-            # Simulation không có tương tác Coulomb (free particle)
-            results[f'{chi0}_no_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=False)
-            
-        except Exception as e:
-            print(f"Error in simulation for χ₀ = {chi0}: {e}")
-            import traceback
-            traceback.print_exc()
-            continue
+        # Simulation với tương tác Coulomb (Hartree-Fock)
+        results[f'{chi0}_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=True)
+        
+        # Simulation không có tương tác Coulomb (free particle)
+        results[f'{chi0}_no_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=False)
+        
     
 
 

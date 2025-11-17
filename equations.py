@@ -101,7 +101,6 @@ def bloch_equations(t, y, chi0, delta_t, Delta_0, T2_0, E_R, Delta_epsilon, g_ma
     f_n = y[:N]
     p_n = y[N:2*N] + 1j * y[2*N:3*N]
 
-    # Tính T2 phụ thuộc thời gian nếu cần
     if use_time_dependent_T2:
         T2 = compute_T2_time_dependent(f_n, T2_0, gamma)
     else:
@@ -114,10 +113,8 @@ def bloch_equations(t, y, chi0, delta_t, Delta_0, T2_0, E_R, Delta_epsilon, g_ma
     dp_dt = np.zeros(N, dtype=complex)
 
     for n in range(N):
-        # ∂f_n/∂t = -2 Im[Ω_n^R p_n*]                     (0.5a)
         df_dt[n] = -2.0 * np.imag(Omega_R[n] * np.conj(p_n[n]))
 
-        # ∂p_n/∂t = -i/ℏ [nΔε - Δ0 - E_n] p_n + i[1 - 2f_n] Ω_n^R - p_n/T2  (0.5b)
         detuning = (n+1) * Delta_epsilon - Delta_0 - En[n]
         dp_dt[n] = (-1j / hbar) * detuning * p_n[n] + 1j * (1.0 - 2.0 * f_n[n]) * Omega_R[n] - p_n[n] / T2
 
@@ -139,7 +136,6 @@ def calculate_absorption_spectrum(t, P_t, E_t):
     n = len(t)
 
     # Fourier Transform:
-    # Sử dụng rời rạc hóa Riemann: Δt Σ_n f(t_n) e^(iωt_n)
     P_freq = np.fft.fft(P_t) * dt
     E_freq = np.fft.fft(E_t) * dt
 
