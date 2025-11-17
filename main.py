@@ -69,7 +69,18 @@ def main():
         # Simulation không có tương tác Coulomb (free particle)
         results[f'{chi0}_no_coulomb'] = run_simulation(chi0, use_time_dependent_T2=True, use_coulomb=False)
         
-    
+        # Visualization of absorption spectra
+        energy_coulomb, alpha_coulomb = results[f'{chi0}_coulomb'][5], results[f'{chi0}_coulomb'][6]
+        energy_no_coulomb, alpha_no_coulomb = results[f'{chi0}_no_coulomb'][5], results[f'{chi0}_no_coulomb'][6]
+        plt.figure()
+        plt.plot(energy_coulomb, alpha_coulomb, label='With Coulomb')
+        plt.plot(energy_no_coulomb, alpha_no_coulomb, label='Without Coulomb')
+        plt.xlabel('Energy ℏω (meV)')
+        plt.ylabel('Absorption α(ω)')
+        plt.title(f'Absorption Spectrum for χ₀ = {chi0}')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
 
 
 if __name__ == "__main__":
